@@ -25,13 +25,14 @@ Doesn't play audio locally, requires web or native [snapcast](https://github.com
 3. Go through settings/common.env and fill out anything you want to change, specifically the following
   * HOSTED_URL
   * ADMIN_EMAIL
-4. Ensure traffic is routed and your DNS resolves correctly
-5. Ensure req'd ports are open and not blocked by firewall. Defaults ports required are 80, 443 and 5454.
-6. Run ```./start```
-7. In a Spotify client, select the speaker, "librespot-docker" with the default settings/common.env, and play some music
-8. In a browser, you should be able to go to "$SNAPSERVER_SUBDOMAIN.$HOSTED_URL", or "snapcast.example.com" with the default settings/common.env
-9. Press the play icon in the top right hand corner of the screen and you should hear your Spotify connect stream
-10. Repeat steps 8 and 9 with other devices
+4. Generate a dhparam.pem for nginx by running ```mkdir -p appdata/nginx && openssl dhparam -out ./appdata/nginx/dhparam.pem 2048``` in the repo's root
+5. Ensure traffic is routed and your DNS resolves correctly
+6. Ensure req'd ports are open and not blocked by firewall. Defaults ports required are 80, 443 and 5454.
+7. Run ```./start```
+8. In a Spotify client, select the speaker, "librespot-docker" with the default settings/common.env, and play some music
+9. In a browser, you should be able to go to "$SNAPSERVER_SUBDOMAIN.$HOSTED_URL", or "snapcast.example.com" with the default settings/common.env
+10. Press the play icon in the top right hand corner of the screen and you should hear your Spotify connect stream
+11. Repeat steps 8 and 9 with other devices
 
 ## Libraries 
 
