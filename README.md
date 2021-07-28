@@ -1,2 +1,3 @@
-# snapcast-librespot-docker-compose
-docker-compose stack that broadcasts a spotify connect speaker and streams to snapcast nginx ssl
+(mmmaxwwwell/snapcast-liberspot-docker-compose)[https://github.com/mmmaxwwwell/snapcast-librespot-docker-compose]
+
+Docker compose stack that provides a Spotify connect speaker to snapcast server

@@ -1,0 +1,4 @@
+#!/bin/bash
+./down
+sudo docker-compose --env-file ./settings/common.env pull
+./start

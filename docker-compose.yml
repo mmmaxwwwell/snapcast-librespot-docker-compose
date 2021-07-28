@@ -1,0 +1,62 @@
+version: '3'
+services:
+  librespot:
+    image: mmmaxwwwell/librespot
+    container_name: librespot
+    env_file:
+      - ./settings/librespot.env
+    volumes: 
+      - ./appdata/librespot/cache:/var/cache/librespot
+      - ./appdata/librespot/stream:/data
+    network_mode: "host"
+    restart: always
+  snapserver:
+    image: mmmaxwwwell/snapserver
+    container_name: snapserver-${STACK_NAME}
+    restart: always
+    volumes:
+      - ./settings/snapserver.conf:/etc/snapserver.conf
+      - ./appdata/librespot/stream:/tmp/librespot-docker-stream
+    ports:
+      - ${LISTEN_IP}:1704:1704
+      - ${LISTEN_IP}:1705:1705
+      - ${LISTEN_IP}:1780:1780
+    env_file:
+      - ./settings/common.env
+    networks:
+      - snapserver
+    depends_on:
+      - nginx
+  nginx:
+    image: mmmaxwwwell/nginx:latest
+    container_name: nginx-${STACK_NAME}
+    restart: always
+    volumes:
+     - webroot:/usr/share/nginx/html/
+     - certbot-etc:/etc/letsencrypt
+     - certbot-var:/var/lib/letsencrypt
+     - ./appdata/nginx/dhparam.pem:/etc/ssl/certs/dhparam.pem
+     - ./templates:/etc/nginx/templates
+    networks:
+      - snapserver
+    env_file:
+      - ./settings/common.env
+    ports:
+      - "${SSL_PORT_IP}:${SSL_PORT}:443"
+      - "${HTTP_PORT_IP}:${HTTP_PORT}:80"
+  certbot:
+    image: mmmaxwwwell/certbot
+    container_name: certbot-${STACK_NAME}
+    volumes:
+    - certbot-etc:/etc/letsencrypt
+    - certbot-var:/var/lib/letsencrypt
+    - webroot:/var/www/html
+    depends_on:
+    - nginx
+    command: certonly --rsa-key-size 4096 --webroot --noninteractive --webroot-path=/var/www/html --email ${ADMIN_EMAIL} --agree-tos --no-eff-email -d ${SNAPSERVER_SUBDOMAIN}${HOSTED_URL} --expand
+volumes:
+  certbot-etc:
+  certbot-var:
+  webroot:
+networks:
+  snapserver:
